@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Data to Paper — AI-Assisted Research Writing System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0A1628;
+    --navy-mid: #112240;
+    --blue: #1A6FD4;
+    --blue-l: #3B8EF0;
+    --gold: #C8973A;
+    --gold-l: #E8B55A;
+    --cream: #F5F0E8;
+    --cream-d: #EDE5D6;
+    --white: #FFFFFF;
+    --text: #1A1A2E;
+    --muted: #5A6070;
+    --border: rgba(10,22,40,0.1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 6vw;
+    height: 64px;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.02em;
+  }
+  .nav-cta {
+    background: var(--navy);
+    color: var(--cream);
+    font-size: 13px; font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--blue); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 6vw 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 80% 40%, rgba(26,111,212,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 70%, rgba(200,151,58,0.06) 0%, transparent 60%);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--blue);
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--navy);
+    margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--blue);
+  }
+  .hero-sub {
+    font-size: 18px; font-weight: 300;
+    color: var(--muted);
+    max-width: 500px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+    opacity: 0; animation: fadeUp 0.6s 0.3s forwards;
+  }
+  .hero-sub strong { color: var(--text); font-weight: 500; }
+  .hero-actions {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.6s 0.4s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--navy);
+    color: var(--cream);
+    font-size: 15px; font-weight: 500;
+    padding: 16px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 24px rgba(10,22,40,0.2);
+  }
+  .btn-primary:hover { background: var(--blue); transform: translateY(-1px); box-shadow: 0 8px 32px rgba(26,111,212,0.3); }
+  .btn-price {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 15px; font-weight: 700;
+    padding: 16px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-price:hover { background: var(--gold-l); transform: translateY(-1px); }
+  .hero-guarantee {
+    font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 16px;
+    opacity: 0; animation: fadeUp 0.6s 0.5s forwards;
+  }
+  .hero-guarantee::before { content: '✓'; color: #2E9E6B; font-weight: 700; }
+
+  /* Hero card */
+  .hero-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(10,22,40,0.12), 0 4px 16px rgba(10,22,40,0.06);
+    opacity: 0; animation: fadeLeft 0.7s 0.4s forwards;
+    position: relative;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--blue), var(--gold));
+    border-radius: 16px 16px 0 0;
+  }
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--navy); margin-bottom: 20px; line-height: 1.3;
+  }
+  .includes-list { list-style: none; margin-bottom: 24px; }
+  .includes-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 14px;
+  }
+  .includes-list li:last-child { border-bottom: none; }
+  .inc-icon {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0; margin-top: 1px;
+  }
+  .inc-name { font-weight: 500; color: var(--navy); }
+  .inc-desc { font-size: 12px; color: var(--muted); }
+  .price-row {
+    display: flex; align-items: baseline; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .price-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px; font-weight: 900; color: var(--navy);
+  }
+  .price-sub { font-size: 13px; color: var(--muted); }
+  .card-cta {
+    display: block; text-align: center;
+    background: var(--navy); color: var(--cream);
+    font-size: 15px; font-weight: 500;
+    padding: 14px; border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .card-cta:hover { background: var(--blue); }
+  .card-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 100px 6vw; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--blue); }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px; color: var(--muted); font-weight: 300;
+    max-width: 560px; line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* ── PROBLEM ── */
+  .problem { background: var(--navy); }
+  .problem .section-eyebrow { color: var(--gold-l); }
+  .problem .section-eyebrow::before { background: var(--gold-l); }
+  .problem .section-title { color: var(--cream); }
+  .problem .section-sub { color: rgba(245,240,232,0.6); }
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-bottom: 60px;
+  }
+  .problem-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 32px 28px;
+    border-radius: 4px;
+  }
+  .problem-card:first-child { border-radius: 12px 4px 4px 12px; }
+  .problem-card:last-child { border-radius: 4px 12px 12px 4px; }
+  .problem-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px; font-weight: 900;
+    color: rgba(255,255,255,0.08);
+    margin-bottom: 12px;
+    display: block;
+  }
+  .problem-stat {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 700;
+    color: var(--gold-l);
+    display: block; margin-bottom: 6px;
+  }
+  .problem-text { font-size: 14px; color: rgba(245,240,232,0.5); line-height: 1.6; }
+  .problem-quote {
+    border-left: 3px solid var(--gold);
+    padding: 24px 32px;
+    background: rgba(200,151,58,0.06);
+    border-radius: 0 12px 12px 0;
+  }
+  .problem-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-style: italic;
+    color: var(--cream); line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .problem-quote cite { font-size: 13px; color: rgba(245,240,232,0.4); }
+
+  /* ── WHAT'S INSIDE ── */
+  .inside { background: var(--cream); }
+  .inside-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .inside-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid var(--border);
+    transition: all 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .inside-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .inside-card:hover { box-shadow: 0 8px 32px rgba(10,22,40,0.1); transform: translateY(-2px); }
+  .inside-card:hover::after { transform: scaleX(1); }
+  .inside-icon {
+    font-size: 28px; margin-bottom: 16px; display: block;
+  }
+  .inside-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--navy); margin-bottom: 10px;
+  }
+  .inside-card-desc { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+  .inside-items { list-style: none; }
+  .inside-items li {
+    font-size: 13px; color: var(--text);
+    padding: 5px 0; padding-left: 16px; position: relative;
+  }
+  .inside-items li::before { content: '→'; position: absolute; left: 0; color: var(--blue); font-size: 11px; top: 7px; }
+
+  /* ── WORKFLOW PREVIEW ── */
+  .workflow { background: var(--cream-d); }
+  .workflow-steps {
+    display: flex; flex-direction: column; gap: 3px;
+    margin-bottom: 48px;
+  }
+  .wstep {
+    display: flex; align-items: center; gap: 20px;
+    padding: 16px 24px;
+    background: var(--white);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .wstep:hover { border-color: var(--blue); background: rgba(26,111,212,0.02); }
+  .wstep.highlight {
+    background: var(--navy); border-color: var(--navy);
+  }
+  .wstep.highlight .wstep-num { background: rgba(255,255,255,0.15); color: #fff; }
+  .wstep.highlight .wstep-title { color: #fff; }
+  .wstep.highlight .wstep-desc { color: rgba(255,255,255,0.5); }
+  .wstep-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--cream-d); color: var(--navy);
+    font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .wstep-title { font-weight: 500; font-size: 15px; flex: 1; }
+  .wstep-desc { font-size: 13px; color: var(--muted); }
+  .wstep-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em;
+    padding: 4px 10px; border-radius: 4px;
+    background: var(--cream-d); color: var(--muted);
+  }
+  .wstep.highlight .wstep-tag { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+  /* ── PROMPT PREVIEW ── */
+  .prompts { background: var(--white); }
+  .prompt-preview {
+    background: #0F1A2E;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .prompt-preview::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--gold));
+  }
+  .prompt-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .prompt-section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 4px;
+  }
+  .prompt-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; line-height: 1.8;
+    color: rgba(255,255,255,0.85);
+    white-space: pre-wrap;
+  }
+  .prompt-code .ph { color: #5BA3F5; }
+  .prompt-code .comment { color: rgba(255,255,255,0.3); }
+  .prompt-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .ptab {
+    background: none; border: 1px solid var(--border);
+    border-radius: 6px; padding: 7px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; cursor: pointer; color: var(--muted);
+    transition: all 0.15s;
+  }
+  .ptab.active { background: var(--navy); color: var(--cream); border-color: var(--navy); }
+  .ptab:hover:not(.active) { border-color: var(--blue); color: var(--blue); }
+
+  /* ── DECISION TREE PREVIEW ── */
+  .tree { background: var(--cream); }
+  .tree-items { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+  .tree-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .tree-item:hover { border-color: var(--blue); transform: translateX(4px); }
+  .tree-emoji { font-size: 20px; width: 40px; flex-shrink: 0; }
+  .tree-info { flex: 1; }
+  .tree-name { font-weight: 600; font-size: 15px; color: var(--navy); margin-bottom: 2px; }
+  .tree-when { font-size: 13px; color: var(--muted); }
+  .tree-arrow { color: var(--blue); font-size: 13px; font-weight: 600; white-space: nowrap; }
+
+  /* ── TESTIMONIALS / SOCIAL PROOF ── */
+  .social { background: var(--navy); padding: 80px 6vw; }
+  .social .section-title { color: var(--cream); }
+  .social .section-sub { color: rgba(245,240,232,0.5); }
+  .social-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .testimonial {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 28px;
+  }
+  .test-stars { color: var(--gold); margin-bottom: 14px; font-size: 14px; letter-spacing: 2px; }
+  .test-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-style: italic;
+    color: rgba(245,240,232,0.85);
+    line-height: 1.65; margin-bottom: 18px;
+  }
+  .test-author { font-size: 12px; color: rgba(245,240,232,0.4); }
+  .test-author strong { color: rgba(245,240,232,0.7); display: block; font-size: 13px; }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: var(--cream-d);
+    text-align: center;
+    padding: 120px 6vw;
+  }
+  .cta-box {
+    max-width: 640px; margin: 0 auto;
+  }
+  .cta-price-display {
+    display: inline-flex; align-items: baseline; gap: 8px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 40px;
+    margin-bottom: 32px;
+  }
+  .cta-price-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900; color: var(--navy);
+  }
+  .cta-price-label { font-size: 14px; color: var(--muted); }
+  .cta-includes {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 10px; margin: 28px 0;
+  }
+  .cta-chip {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px; color: var(--text);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cta-chip::before { content: '✓'; color: #2E9E6B; font-weight: 700; font-size: 12px; }
+  .cta-btn {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--cream);
+    font-size: 17px; font-weight: 500;
+    padding: 18px 48px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 24px rgba(10,22,40,0.2);
+    margin-bottom: 16px;
+  }
+  .cta-btn:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(26,111,212,0.3); }
+  .cta-fine { font-size: 13px; color: var(--muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 40px 6vw;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; color: rgba(245,240,232,0.6);
+  }
+  .footer-note { font-size: 12px; color: rgba(245,240,232,0.3); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero-card { max-width: 480px; }
+    .problem-grid { grid-template-columns: 1fr; gap: 12px; }
+    .inside-grid { grid-template-columns: 1fr; }
+    .social-grid { grid-template-columns: 1fr; }
+    .problem-card { border-radius: 8px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">From Data to Paper</div>
+  <a href="#buy" class="nav-cta">Get for $49 →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow">Research writing system</div>
+      <h1 class="hero-title">Stop staring at<br><em>blank pages.</em><br>Start publishing.</h1>
+      <p class="hero-sub">
+        The average researcher spends <strong>3–6 weeks</strong> on a first draft.
+        This system gets you there in days — with a structured workflow,
+        decision tree, and ready-to-use AI prompts.
+      </p>
+      <div class="hero-actions">
+        <a href="#inside" class="btn-primary">See what's inside ↓</a>
+        <a href="#buy" class="btn-price">Get it for $49</a>
+      </div>
+      <div class="hero-guarantee">One-time purchase. Instant download. Works for any field.</div>
+    </div>
+
+    <div class="hero-card">
+      <div class="card-label">What you get</div>
+      <div class="card-title">From Data to Paper<br>Complete Research Writing System</div>
+      <ul class="includes-list">
+        <li>
+          <div class="inc-icon" style="background:#E6F1FB;">📘</div>
+          <div><div class="inc-name">PDF Guide — 40+ pages</div><div class="inc-desc">Full workflow, section-by-section guidance</div></div>
+        </li>
+        <li>
+          <div class="inc-icon" style="background:#E1F5EE;">🧭</div>
+          <div><div class="inc-name">Decision Tree</div><div class="inc-desc">Choose your paper structure in minutes</div></div>
+        </li>
+        <li>
+          <div class="inc-icon" style="background:#FAEEDA;">🤖</div>
+          <div><div class="inc-name">Full AI Prompt Library</div><div class="inc-desc">Specific prompts with data placeholders for every section</div></div>
+        </li>
+        <li>
+          <div class="inc-icon" style="background:#FCEBEB;">🃏</div>
+          <div><div class="inc-name">5 Action Cards</div><div class="inc-desc">IMRaD, Letter, Theory, ML, Results+Discussion</div></div>
+        </li>
+        <li>
+          <div class="inc-icon" style="background:#EEEDFE;">✅</div>
+          <div><div class="inc-name">Pre-submission Checklist</div><div class="inc-desc">15 items — never miss a critical step</div></div>
+        </li>
+      </ul>
+      <div class="price-row">
+        <span class="price-main">$49</span>
+        <span class="price-sub">one-time · instant download</span>
+      </div>
+      <a href="#buy" class="card-cta">Get instant access →</a>
+      <div class="card-note">Works for all fields · Any journal type</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">The problem</div>
+    <h2 class="section-title reveal">Most researchers know their data.<br>They don't know how to write it.</h2>
+    <p class="section-sub reveal">The gap is not intelligence — it's structure. Nobody teaches you how to turn results into a paper.</p>
+
+    <div class="problem-grid reveal">
+      <div class="problem-card">
+        <span class="problem-num">01</span>
+        <span class="problem-stat">3–6 weeks</span>
+        <p class="problem-text">Average time to write a first draft — most of it spent staring at a blank page or rewriting the introduction.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-num">02</span>
+        <span class="problem-stat">~60%</span>
+        <p class="problem-text">Of first submissions are rejected for structural or clarity issues — not because the science is wrong.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-num">03</span>
+        <span class="problem-stat">0 hours</span>
+        <p class="problem-text">Of formal training most PhD students receive on how to actually structure and write a scientific paper.</p>
+      </div>
+    </div>
+
+    <div class="problem-quote reveal">
+      <p>"I have data. I know the result matters. But I don't know what to write first — or how to structure any of it."</p>
+      <cite>— What every researcher says before finding a system</cite>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="inside" id="inside">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">What's inside</div>
+    <h2 class="section-title reveal">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-sub reveal">Four components that work together as a complete system — not four separate documents.</p>
+
+    <div class="inside-grid">
+      <div class="inside-card reveal">
+        <span class="inside-icon">📘</span>
+        <div class="inside-card-title">PDF Guide — 40+ pages</div>
+        <p class="inside-card-desc">A complete, structured reference you keep open while writing. Every section has detailed guidance, examples, and common mistakes to avoid.</p>
+        <ul class="inside-items">
+          <li>9-step writing workflow with do/don't guidance per step</li>
+          <li>Figure rules and caption templates</li>
+          <li>7 common failure modes with concrete fixes</li>
+          <li>Pre-submission checklist — 15 items</li>
+        </ul>
+      </div>
+
+      <div class="inside-card reveal">
+        <span class="inside-icon">🧭</span>
+        <div class="inside-card-title">Decision Tree</div>
+        <p class="inside-card-desc">Stop guessing which structure to use. Answer two questions and you know exactly which paper format fits your work — in minutes.</p>
+        <ul class="inside-items">
+          <li>IMRaD — standard experimental</li>
+          <li>Results + Discussion — physics/engineering</li>
+          <li>Letter — high-impact, short form</li>
+          <li>Theory/Modeling — no experimental data</li>
+          <li>AI/ML Paper — methods + benchmarks</li>
+        </ul>
+      </div>
+
+      <div class="inside-card reveal">
+        <span class="inside-icon">🤖</span>
+        <div class="inside-card-title">Full AI Prompt Library</div>
+        <p class="inside-card-desc">Not generic prompts — specific, structured templates with data placeholders for every section. Fill in the brackets, paste into any AI, get a strong draft.</p>
+        <ul class="inside-items">
+          <li>Results prompt — with figure description format</li>
+          <li>Introduction prompt — with gap + contribution structure</li>
+          <li>Methods prompt — with reproducibility checklist</li>
+          <li>Discussion prompt — with limitations framework</li>
+          <li>Abstract prompt — 5-sentence structure</li>
+        </ul>
+      </div>
+
+      <div class="inside-card reveal">
+        <span class="inside-icon">🃏</span>
+        <div class="inside-card-title">5 Action Cards</div>
+        <p class="inside-card-desc">One card per paper type. Structure, writing order, key rules, and a starter AI prompt — all on one page you can reference while writing.</p>
+        <ul class="inside-items">
+          <li>Structure diagram (final order)</li>
+          <li>Writing order (different from reading order)</li>
+          <li>3–4 key rules for that paper type</li>
+          <li>A ready-to-run AI prompt specific to that structure</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="workflow">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">The workflow</div>
+    <h2 class="section-title reveal">9 steps. One clear sequence.<br>No guessing.</h2>
+    <p class="section-sub reveal">Each step is expanded with what to do, what to avoid, and which AI prompt to use. Click any step in the full guide for detailed guidance.</p>
+
+    <div class="workflow-steps reveal">
+      <div class="wstep"><div class="wstep-num">1</div><div class="wstep-title">Inspect your data</div><div class="wstep-desc">Understand before you write</div><div class="wstep-tag">Foundation</div></div>
+      <div class="wstep"><div class="wstep-num">2</div><div class="wstep-title">Generate all candidate plots</div><div class="wstep-desc">Make more than you'll use</div><div class="wstep-tag">Visualization</div></div>
+      <div class="wstep"><div class="wstep-num">3</div><div class="wstep-title">Select your core figures</div><div class="wstep-desc">3–5 load-bearing figures</div><div class="wstep-tag">Curation</div></div>
+      <div class="wstep highlight"><div class="wstep-num">4</div><div class="wstep-title">Write Results — always first</div><div class="wstep-desc">The engine of the paper</div><div class="wstep-tag">⚡ Start here</div></div>
+      <div class="wstep"><div class="wstep-num">5</div><div class="wstep-title">Extract your contribution statement</div><div class="wstep-desc">"Here we show that…"</div><div class="wstep-tag">Critical</div></div>
+      <div class="wstep"><div class="wstep-num">6</div><div class="wstep-title">Write the Introduction</div><div class="wstep-desc">Gap → contribution</div><div class="wstep-tag">Narrative</div></div>
+      <div class="wstep"><div class="wstep-num">7</div><div class="wstep-title">Write Methods</div><div class="wstep-desc">Reproducible and specific</div><div class="wstep-tag">Reproducibility</div></div>
+      <div class="wstep"><div class="wstep-num">8</div><div class="wstep-title">Write Discussion</div><div class="wstep-desc">Interpret → contextualize → limitations</div><div class="wstep-tag">Interpretation</div></div>
+      <div class="wstep"><div class="wstep-num">9</div><div class="wstep-title">Write the Abstract — last</div><div class="wstep-desc">Only when everything else is done</div><div class="wstep-tag">Always last</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMPT PREVIEW -->
+<section class="prompts">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">AI prompt library</div>
+    <h2 class="section-title reveal">Not "write a Results section."<br>Actually useful prompts.</h2>
+    <p class="section-sub reveal">Every prompt includes what data to fill in, what rules to enforce, and what to avoid asking AI. Replace the brackets — paste — get a strong draft.</p>
+
+    <div class="prompt-tabs reveal">
+      <button class="ptab active" onclick="showPrompt('results', this)">Results</button>
+      <button class="ptab" onclick="showPrompt('intro', this)">Introduction</button>
+      <button class="ptab" onclick="showPrompt('methods', this)">Methods</button>
+      <button class="ptab" onclick="showPrompt('discussion', this)">Discussion</button>
+      <button class="ptab" onclick="showPrompt('abstract', this)">Abstract</button>
+    </div>
+
+    <div class="prompt-preview reveal">
+      <div class="prompt-header">
+        <span class="prompt-section-tag" id="ptag" style="background:rgba(59,142,240,0.15);color:#5BA3F5;">RESULTS</span>
+      </div>
+      <pre class="prompt-code" id="pcode">Write a Results paragraph for a scientific paper.
+
+Figure: <span class="ph">[DESCRIBE THE FIGURE — e.g. "Bar chart comparing reaction yield
+        across 4 temperature conditions (20, 40, 60, 80°C)"]</span>
+Main observation: <span class="ph">[WHAT THE DATA SHOWS — e.g. "Yield increases from
+        23% at 20°C to 71% at 60°C, then drops to 58% at 80°C"]</span>
+Statistics: <span class="ph">[n=X, p-value, test — e.g. "n=5, p&lt;0.01 for 60°C vs 20°C"]</span>
+Control/baseline: <span class="ph">[IF APPLICABLE — e.g. "Untreated control: 18%"]</span>
+
+<span class="comment">Rules:
+- Use past tense. Report specific numbers.
+- Do not interpret or speculate.
+- Never use "suggests" or "indicates" — that's Discussion.
+- One paragraph, 80–120 words.</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- DECISION TREE PREVIEW -->
+<section class="tree">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Decision tree</div>
+    <h2 class="section-title reveal">Answer two questions.<br>Know your structure.</h2>
+    <p class="section-sub reveal">Do you have experimental data? Is your contribution a method, a result, or a model? That's it. The decision tree takes you to the right action card.</p>
+
+    <div class="tree-items reveal">
+      <div class="tree-item">
+        <div class="tree-emoji">🔵</div>
+        <div class="tree-info">
+          <div class="tree-name">IMRaD</div>
+          <div class="tree-when">Experimental data · hypothesis testing · most journals</div>
+        </div>
+        <div class="tree-arrow">→ Card A</div>
+      </div>
+      <div class="tree-item">
+        <div class="tree-emoji">🟣</div>
+        <div class="tree-info">
+          <div class="tree-name">Results + Discussion</div>
+          <div class="tree-when">Interpretation inseparable from results · physics · engineering</div>
+        </div>
+        <div class="tree-arrow">→ Card B</div>
+      </div>
+      <div class="tree-item">
+        <div class="tree-emoji">🔴</div>
+        <div class="tree-info">
+          <div class="tree-name">Letter / Short communication</div>
+          <div class="tree-when">Single strong result · high novelty · Nature, PRL, etc.</div>
+        </div>
+        <div class="tree-arrow">→ Card C</div>
+      </div>
+      <div class="tree-item">
+        <div class="tree-emoji">🟠</div>
+        <div class="tree-info">
+          <div class="tree-name">Theory / Modeling</div>
+          <div class="tree-when">No experimental data · model or framework is the contribution</div>
+        </div>
+        <div class="tree-arrow">→ Card D</div>
+      </div>
+      <div class="tree-item">
+        <div class="tree-emoji">🟢</div>
+        <div class="tree-info">
+          <div class="tree-name">AI / ML Paper</div>
+          <div class="tree-when">Algorithm or model · metrics + baselines · NeurIPS, ICML, CVPR</div>
+        </div>
+        <div class="tree-arrow">→ Card E</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="social">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal" style="color:var(--gold-l);">Who this is for</div>
+    <h2 class="section-title reveal">Built for researchers who have results — and need to write them.</h2>
+    <p class="section-sub reveal" style="margin-bottom:40px;">Works for any field. Any paper type. Any career stage.</p>
+
+    <div class="social-grid reveal">
+      <div class="testimonial">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-quote">"I had my data for 4 months and couldn't figure out where to start. This decision tree alone saved me two weeks of confusion."</p>
+        <div class="test-author"><strong>PhD candidate, Materials Science</strong>3rd year, first first-author paper</div>
+      </div>
+      <div class="testimonial">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-quote">"The AI prompts are the real product. I've tried generic prompts before — these actually work because you fill in your real data."</p>
+        <div class="test-author"><strong>Postdoc, Computational Biology</strong>Published in Nature Methods</div>
+      </div>
+      <div class="testimonial">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-quote">"I used this to write an ML paper for NeurIPS. The action card for AI/ML papers alone is worth $49 — it told me exactly what reviewers expect."</p>
+        <div class="test-author"><strong>Research Engineer, AI Lab</strong>First conference submission accepted</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="buy">
+  <div class="cta-box">
+    <div class="section-eyebrow reveal" style="justify-content:center;">Get the system</div>
+    <h2 class="section-title reveal" style="text-align:center;">Ready to write<br>your paper?</h2>
+    <p class="section-sub reveal" style="text-align:center;margin:0 auto 32px;">One purchase. Everything you need to go from data to a structured, submission-ready paper.</p>
+
+    <div class="cta-price-display reveal">
+      <span class="cta-price-num">$49</span>
+      <span class="cta-price-label">one-time · instant download</span>
+    </div>
+
+    <div class="cta-includes reveal">
+      <span class="cta-chip">PDF Guide (40+ pages)</span>
+      <span class="cta-chip">Decision Tree</span>
+      <span class="cta-chip">AI Prompt Library</span>
+      <span class="cta-chip">5 Action Cards</span>
+      <span class="cta-chip">Pre-submission Checklist</span>
+    </div>
+
+    <div class="reveal">
+      <a href="https://datatopaper.gumroad.com/l/xcovza" class="cta-btn">Get instant access for $49 →</a>
+      <div class="cta-fine">Instant PDF download · Works for all fields and paper types</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">From Data to Paper</div>
+  <div class="footer-note">© 2025 · Research Writing System · All rights reserved</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Prompt tabs
+  const prompts = {
+    results: {
+      tag: 'RESULTS', color: 'rgba(59,142,240,0.15)', textColor: '#5BA3F5',
+      code: `Write a Results paragraph for a scientific paper.
+
+Figure: <span class="ph">[DESCRIBE THE FIGURE — e.g. "Bar chart comparing reaction yield
+        across 4 temperature conditions (20, 40, 60, 80°C)"]</span>
+Main observation: <span class="ph">[WHAT THE DATA SHOWS — e.g. "Yield increases from
+        23% at 20°C to 71% at 60°C, then drops to 58% at 80°C"]</span>
+Statistics: <span class="ph">[n=X, p-value, test — e.g. "n=5, p&lt;0.01 for 60°C vs 20°C"]</span>
+Control/baseline: <span class="ph">[IF APPLICABLE — e.g. "Untreated control: 18%"]</span>
+
+<span class="comment">Rules:
+- Use past tense. Report specific numbers.
+- Do not interpret or speculate.
+- Never use "suggests" or "indicates" — that's Discussion.
+- One paragraph, 80–120 words.</span>`
+    },
+    intro: {
+      tag: 'INTRODUCTION', color: 'rgba(15,110,86,0.15)', textColor: '#2EBD8A',
+      code: `Write an Introduction (4-paragraph structure).
+
+Field and importance: <span class="ph">[DESCRIBE THE AREA AND WHY IT MATTERS —
+        e.g. "Drug-resistant infections cause 700,000 deaths/yr"]</span>
+What is known: <span class="ph">[2–3 KEY ESTABLISHED FINDINGS IN YOUR FIELD]</span>
+The gap: <span class="ph">[SPECIFIC OPEN QUESTION — e.g. "However, the mechanism
+        of X under condition Y remains unknown"]</span>
+Your contribution: <span class="ph">[YOUR FINDING — "Here we show that X occurs via Y"]</span>
+Key result: <span class="ph">[ONE QUANTITATIVE RESULT TO MENTION]</span>
+
+<span class="comment">Paragraph 4 must end with "Here we show that…"
+Leave [CITATION] placeholders where references belong.</span>`
+    },
+    methods: {
+      tag: 'METHODS', color: 'rgba(90,96,112,0.15)', textColor: '#8A90A0',
+      code: `Write a Methods section. Organize into subsections.
+
+Materials/datasets: <span class="ph">[LIST WITH FULL SPECIFICATIONS —
+        catalog numbers, accession IDs, or dataset DOIs]</span>
+Equipment/software: <span class="ph">[WITH MODEL NUMBERS AND VERSIONS —
+        e.g. "Zeiss LSM 880 confocal; ImageJ v1.53"]</span>
+Protocol: <span class="ph">[STEPS IN ORDER — exact timing, concentrations, conditions]</span>
+Sample size: <span class="ph">[e.g. "n=6 biological replicates per condition"]</span>
+Statistical tests: <span class="ph">[e.g. "One-way ANOVA, Tukey post-hoc, p&lt;0.05"]</span>
+Controls: <span class="ph">[POSITIVE AND NEGATIVE CONTROLS]</span>
+
+<span class="comment">Write in past tense. Be specific enough for replication.
+Do not include results or rationale.</span>`
+    },
+    discussion: {
+      tag: 'DISCUSSION', color: 'rgba(186,117,23,0.15)', textColor: '#C8973A',
+      code: `Write a Discussion section.
+
+Main result: <span class="ph">[YOUR KEY FINDING WITH NUMBERS]</span>
+Proposed mechanism: <span class="ph">[WHY YOU THINK THIS RESULT OCCURS —
+        your mechanistic or theoretical explanation]</span>
+Comparison to prior work: <span class="ph">[HOW YOUR RESULT COMPARES —
+        e.g. "Our 71% yield exceeds the 45% by Smith et al."]</span>
+Limitations: <span class="ph">[HONEST LIST OF WHAT YOUR STUDY CANNOT PROVE]</span>
+Implications: <span class="ph">[WHAT THIS ENABLES OR CHANGES IN THE FIELD]</span>
+
+<span class="comment">Open by answering the main research question directly.
+Do not repeat Results. Do not overclaim. State limitations.</span>`
+    },
+    abstract: {
+      tag: 'ABSTRACT', color: 'rgba(163,45,45,0.15)', textColor: '#E06060',
+      code: `Write an Abstract (5-sentence structure, max 200 words).
+
+Field + problem: <span class="ph">[THE AREA AND SPECIFIC PROBLEM — 1 sentence]</span>
+Gap: <span class="ph">[WHAT IS CURRENTLY UNKNOWN — 1 sentence]</span>
+Approach: <span class="ph">[WHAT YOU DID — method in brief]</span>
+Main result: <span class="ph">[KEY FINDING WITH EXACT NUMBERS —
+        e.g. "94.3% accuracy, +12% vs. prior art"]</span>
+Significance: <span class="ph">[WHY THIS MATTERS — practical or conceptual]</span>
+
+<span class="comment">No citations. No undefined jargon.
+Must be readable without access to the paper. Max 200 words.</span>`
+    }
+  };
+
+  function showPrompt(key, btn) {
+    document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const p = prompts[key];
+    document.getElementById('ptag').textContent = p.tag;
+    document.getElementById('ptag').style.background = p.color;
+    document.getElementById('ptag').style.color = p.textColor;
+    document.getElementById('pcode').innerHTML = p.code;
+  }
+</script>
+</body>
+</html>

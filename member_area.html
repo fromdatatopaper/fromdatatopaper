@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Data to Paper — Member Area</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#1C2333;--blue:#1A6FD4;--blue-l:#E8F2FD;--blue-m:#3B8EF0;
+  --teal:#0F6E56;--teal-l:#E4F5EE;--red:#B83030;--red-l:#FDEAEA;
+  --amber:#8A5C00;--amber-l:#FFF5E0;--green:#2E7D32;--green-l:#EBF5EB;
+  --sand:#FAF7F2;--sand-d:#F2EDE4;--border:#E0D9CF;--muted:#6B7280;
+  --white:#FFFFFF;--radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--sand);color:var(--ink);font-size:15px;line-height:1.7;}
+
+/* TOP BAR */
+.bar{background:var(--white);border-bottom:1px solid var(--border);padding:0 36px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.bar-logo{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--ink);}
+.bar-right{display:flex;align-items:center;gap:12px;}
+.bar-links{display:flex;gap:2px;}
+.bl{background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--muted);padding:5px 12px;border-radius:6px;transition:all .15s;}
+.bl:hover{background:var(--sand);color:var(--ink);}
+.badge{font-size:11px;font-weight:600;background:var(--teal-l);color:var(--teal);padding:4px 12px;border-radius:20px;border:1px solid rgba(15,110,86,.15);}
+
+/* HERO */
+.hero{background:linear-gradient(to bottom,var(--white),var(--sand));border-bottom:1px solid var(--border);padding:56px 36px 48px;}
+.hero-in{max-width:820px;margin:0 auto;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-l);padding:5px 14px;border-radius:20px;margin-bottom:18px;}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue-m);}
+.hero-h{font-family:'Fraunces',serif;font-size:38px;font-weight:700;color:var(--ink);line-height:1.15;letter-spacing:-.02em;margin-bottom:10px;}
+.hero-h em{font-style:italic;color:var(--blue);}
+.hero-sub{font-size:16px;color:var(--muted);max-width:520px;line-height:1.75;margin-bottom:28px;}
+.hero-sub strong{color:var(--ink);font-weight:600;}
+.prog-row{display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;max-width:440px;}
+.prog-icon{font-size:22px;}
+.prog-info{flex:1;}
+.prog-label{font-size:12px;color:var(--muted);margin-bottom:5px;}
+.prog-track{height:6px;background:var(--sand-d);border-radius:6px;overflow:hidden;}
+.prog-fill{height:100%;width:0%;background:var(--blue-m);border-radius:6px;transition:width .8s ease;}
+.prog-count{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;}
+
+/* PAGE */
+.page{max-width:820px;margin:0 auto;padding:0 36px 80px;}
+
+/* START HERE */
+.sh{margin:32px 0 0;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.sh-top{display:flex;align-items:center;gap:10px;padding:16px 22px;background:var(--blue-l);border-bottom:1px solid rgba(26,111,212,.12);}
+.sh-top-icon{font-size:18px;}
+.sh-top-title{font-weight:600;font-size:15px;color:var(--ink);}
+.sh-top-sub{font-size:13px;color:var(--blue);margin-left:auto;}
+.sh-body{padding:20px 22px;}
+.sh-desc{font-size:14px;color:var(--muted);margin-bottom:16px;}
+.sh-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.sh-step{border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .2s;background:var(--white);}
+.sh-step:hover{border-color:var(--blue-m);background:var(--blue-l);}
+.sh-sn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--blue);font-weight:500;margin-bottom:5px;}
+.sh-st{font-size:13px;font-weight:500;color:var(--ink);line-height:1.45;}
+
+/* SECTIONS */
+.sec-head{display:flex;align-items:center;gap:14px;padding:40px 0 16px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.sec-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.08em;color:var(--blue);background:var(--blue-l);padding:4px 11px;border-radius:5px;border:1px solid rgba(26,111,212,.15);}
+.sec-title{font-family:'Fraunces',serif;font-size:21px;font-weight:700;color:var(--ink);flex:1;}
+.sec-sub{font-size:13px;color:var(--muted);margin-bottom:20px;max-width:580px;}
+
+/* FILE CARDS */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fc{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 22px;display:flex;flex-direction:column;gap:9px;transition:all .2s;}
+.fc:hover{border-color:var(--blue-m);box-shadow:0 3px 16px rgba(26,111,212,.08);}
+.fc.wide{grid-column:1/-1;flex-direction:row;align-items:flex-start;gap:16px;}
+.fc.wide .fc-body{flex:1;}
+.fi{width:44px;height:44px;border-radius:10px;background:var(--sand-d);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.fc-name{font-weight:600;font-size:14px;color:var(--ink);line-height:1.4;}
+.fc-desc{font-size:12px;color:var(--muted);line-height:1.65;flex:1;}
+.fc-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--sand-d);padding-top:10px;margin-top:2px;}
+.ftag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:4px;font-weight:500;}
+.fp{background:var(--blue-l);color:var(--blue);border:1px solid rgba(26,111,212,.2);}
+.fd{background:var(--teal-l);color:var(--teal);border:1px solid rgba(15,110,86,.2);}
+.ft{background:#EEE8FF;color:#5240B0;border:1px solid #D8CEF8;}
+.fb{background:var(--amber-l);color:var(--amber);border:1px solid rgba(138,92,0,.2);}
+.dl{display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--white);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;text-decoration:none;transition:background .15s;}
+.dl:hover{background:var(--blue);}
+
+/* WORKFLOW */
+.wfl{display:flex;flex-direction:column;gap:4px;}
+.wi{display:flex;align-items:flex-start;gap:13px;padding:13px 18px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;background:var(--white);transition:all .15s;}
+.wi:hover{background:var(--sand);}
+.wi.wa{background:var(--blue-l);border-color:rgba(26,111,212,.25);}
+.wi.wd{background:var(--green-l);border-color:rgba(46,125,50,.2);}
+.wicb{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;margin-top:2px;transition:all .15s;}
+.wa .wicb{border-color:var(--blue-m);}
+.wd .wicb{background:var(--teal);border-color:var(--teal);color:var(--white);}
+.wisn{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);width:14px;flex-shrink:0;margin-top:4px;}
+.wa .wisn{color:var(--blue);} .wd .wisn{color:var(--teal);}
+.wic{flex:1;}
+.wit{font-weight:600;font-size:14px;color:var(--ink);}
+.wa .wit{color:var(--blue);} .wd .wit{font-weight:500;color:var(--teal);}
+.wih{font-size:12px;color:var(--muted);margin-top:2px;}
+.wibg{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.05em;padding:3px 8px;border-radius:4px;background:var(--sand-d);color:var(--muted);align-self:flex-start;margin-top:3px;flex-shrink:0;}
+.wa .wibg{background:var(--blue-l);color:var(--blue);}
+.wd .wibg{background:var(--teal-l);color:var(--teal);}
+
+/* TREE */
+.tl{display:flex;flex-direction:column;gap:9px;}
+.ti{display:flex;align-items:center;gap:14px;padding:14px 20px;border:1.5px solid var(--border);border-radius:10px;background:var(--white);transition:all .2s;cursor:default;}
+.ti:hover{border-color:var(--blue-m);transform:translateX(4px);background:var(--blue-l);}
+.tem{font-size:18px;flex-shrink:0;}
+.ti-info{flex:1;}
+.ti-n{font-weight:600;font-size:14px;color:var(--ink);margin-bottom:1px;}
+.ti-w{font-size:12px;color:var(--muted);}
+.ti-a{font-size:12px;font-weight:700;color:var(--blue);white-space:nowrap;}
+
+/* PROMPT */
+.pw{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--white);}
+.pbar{display:flex;overflow-x:auto;background:var(--sand);border-bottom:1px solid var(--border);}
+.pstab{background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--muted);padding:11px 18px;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;}
+.pstab:hover{color:var(--ink);}
+.pstab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;background:var(--white);}
+.pfbar{display:flex;gap:6px;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.pftab{background:none;border:1.5px solid var(--border);border-radius:6px;padding:5px 13px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.pftab:hover{color:var(--ink);border-color:var(--blue-m);}
+.pftab.active{background:var(--blue);border-color:var(--blue);color:var(--white);}
+.pd{padding:18px 22px;}
+.pm{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;color:var(--blue);margin-bottom:10px;font-weight:500;}
+.pc{background:var(--sand);border:1px solid var(--border);border-left:3px solid var(--blue-m);border-radius:0 8px 8px 0;padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.85;color:var(--ink);white-space:pre-wrap;position:relative;}
+.ph{color:var(--blue-m);}
+.cm{color:#9CA3AF;}
+.cpb{position:absolute;top:10px;right:10px;background:var(--white);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;}
+.cpb:hover{border-color:var(--blue);color:var(--blue);}
+
+/* INFO BOX */
+.ib{background:var(--blue-l);border:1px solid rgba(26,111,212,.18);border-left:3px solid var(--blue-m);border-radius:0 9px 9px 0;padding:13px 17px;font-size:13px;color:var(--ink);line-height:1.65;margin-bottom:16px;}
+.ib strong{color:var(--ink);font-weight:600;}
+
+/* BEFORE/AFTER */
+.ba-tabs{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;}
+.batab{background:none;border:1.5px solid var(--border);border-radius:6px;padding:5px 13px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.batab:hover{color:var(--ink);}
+.batab.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.ba-panel{display:none;}
+.ba-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ba-col{border-radius:10px;padding:18px 20px;}
+.bef{background:var(--red-l);border:1.5px solid rgba(184,48,48,.15);}
+.aft{background:var(--teal-l);border:1.5px solid rgba(15,110,86,.15);}
+.ba-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-weight:600;}
+.bef .ba-lbl{color:var(--red);} .aft .ba-lbl{color:var(--teal);}
+.ba-q{font-size:13px;font-style:italic;line-height:1.7;color:var(--ink);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,.07);}
+.ba-ul{list-style:none;}
+.ba-ul li{font-size:12px;padding:3px 0 3px 16px;position:relative;color:var(--muted);}
+.bef .ba-ul li::before{content:'✕';position:absolute;left:0;color:var(--red);font-size:11px;}
+.aft .ba-ul li::before{content:'✓';position:absolute;left:0;color:var(--teal);font-size:11px;}
+
+/* CHECKLIST */
+.clg{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:22px 0 9px;}
+.cli{display:flex;align-items:flex-start;gap:11px;padding:11px 15px;border:1.5px solid var(--border);border-radius:9px;margin-bottom:6px;cursor:pointer;transition:all .15s;user-select:none;background:var(--white);}
+.cli:hover{background:var(--sand);}
+.cli.chk{background:var(--green-l);border-color:rgba(46,125,50,.2);}
+.cli-cb{width:18px;height:18px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;margin-top:2px;transition:all .15s;}
+.cli.chk .cli-cb{background:var(--teal);border-color:var(--teal);color:var(--white);}
+.cli-t{font-size:13px;font-weight:500;color:var(--ink);}
+.cli-s{font-size:11px;color:var(--muted);margin-top:1px;}
+.cli.chk .cli-t{color:var(--teal);}
+.done-msg{display:none;text-align:center;padding:16px;background:var(--green-l);border:1.5px solid rgba(46,125,50,.18);border-radius:10px;margin-top:12px;color:var(--green);font-size:14px;font-weight:600;}
+
+/* LATEX CALLOUT */
+.latex-box{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-bottom:12px;}
+.latex-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.latex-icon{font-size:28px;}
+.latex-label{font-size:11px;font-weight:600;color:var(--amber);background:var(--amber-l);padding:3px 9px;border-radius:5px;border:1px solid rgba(138,92,0,.2);}
+.latex-title{font-weight:700;font-size:16px;color:var(--ink);}
+.latex-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+.latex-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.lts{border:1px solid var(--border);border-radius:8px;padding:12px 14px;background:var(--sand);}
+.lts-n{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--amber);font-weight:600;margin-bottom:4px;}
+.lts-t{font-size:12px;font-weight:500;color:var(--ink);line-height:1.4;}
+.lts-s{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:30px 36px;text-align:center;color:var(--muted);font-size:12px;background:var(--white);}
+footer strong{font-family:'Fraunces',serif;color:var(--ink);font-size:14px;}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s;}
+.reveal.vis{opacity:1;transform:none;}
+
+@media(max-width:640px){
+  .bar{padding:0 16px;} .bar-links{display:none;}
+  .hero{padding:36px 20px;} .page{padding:0 20px 60px;}
+  .fg{grid-template-columns:1fr;} .fc.wide{flex-direction:column;}
+  .sh-steps,.latex-steps{grid-template-columns:1fr;}
+  .ba-panel.active{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-logo">From Data to Paper</div>
+  <div class="bar-right">
+    <nav class="bar-links">
+      <button class="bl" onclick="G('#files-s')">Files</button>
+      <button class="bl" onclick="G('#wf-s')">Workflow</button>
+      <button class="bl" onclick="G('#prompt-s')">Prompts</button>
+      <button class="bl" onclick="G('#cl-s')">Checklist</button>
+    </nav>
+    <div class="badge">Member access</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-in">
+    <div class="hero-tag">Welcome — you're in</div>
+    <h1 class="hero-h">Your writing system<br>is <em>ready.</em></h1>
+    <p class="hero-sub">Everything is set up for you. Start with the <strong>Start Here</strong> box below — it tells you exactly what to open first.</p>
+    <div class="prog-row">
+      <div class="prog-icon">📊</div>
+      <div class="prog-info">
+        <div class="prog-label">Your progress — <span id="pd">0</span> of 9 steps complete</div>
+        <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+      </div>
+      <div class="prog-count" id="pct">0%</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- START HERE -->
+  <div class="sh reveal">
+    <div class="sh-top">
+      <span class="sh-top-icon">📌</span>
+      <span class="sh-top-title">Start here — before opening any file</span>
+      <span class="sh-top-sub">3 steps to get started</span>
+    </div>
+    <div class="sh-body">
+      <p class="sh-desc">This system works best in order. Don't open everything at once — follow these three steps and you'll be writing immediately.</p>
+      <div class="sh-steps">
+        <div class="sh-step" onclick="G('#files-s')"><div class="sh-sn">Step 01</div><div class="sh-st">Download the main PDF guide and read pages 1–3</div></div>
+        <div class="sh-step" onclick="G('#dt-s')"><div class="sh-sn">Step 02</div><div class="sh-st">Use the Decision Tree to choose your paper type</div></div>
+        <div class="sh-step" onclick="G('#prompt-s')"><div class="sh-sn">Step 03</div><div class="sh-st">Follow the 9-step workflow with AI prompts</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILES -->
+  <div id="files-s">
+    <div class="sec-head reveal"><div class="sec-badge">01</div><div class="sec-title">Your files</div></div>
+    <p class="sec-sub reveal">All your downloads are here. The main guide is your starting point. Open the template that matches your paper type to start writing.</p>
+    <div class="fg reveal">
+      <div class="fc wide">
+        <div class="fi" style="background:#E8F2FD;">📘</div>
+        <div class="fc-body">
+          <div class="fc-name">From Data to Paper — Main Guide</div>
+          <div class="fc-desc">Your complete system: decision tree, 9-step workflow with detailed guidance, AI prompt library, figure rules, 7 common mistakes with fixes, and pre-submission checklist. Start here.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex-shrink:0;">
+          <span class="ftag fp">PDF · 40+ pages</span>
+          <a href="from_data_to_paper.pdf" class="dl" download>↓ Download</a>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fi" style="background:#E4F5EE;">📋</div>
+        <div class="fc-name">Before & After Examples</div>
+        <div class="fc-desc">5 sections showing weak vs. improved writing with annotations. See exactly what reviewers penalise and how to fix it.</div>
+        <div class="fc-foot"><span class="ftag fb">Bonus · PDF</span><a href="before_after_examples.pdf" class="dl" download>↓ Download</a></div>
+      </div>
+
+      <div class="fc">
+        <div class="fi" style="background:#FFF5E0;">🔬</div>
+        <div class="fc-name">Field-Specific Prompts</div>
+        <div class="fc-desc">11 AI prompts tuned for Life Sciences, Physics, and CS/AI — matching what reviewers in each field expect.</div>
+        <div class="fc-foot"><span class="ftag fb">Bonus · PDF</span><a href="field_specific_prompts.pdf" class="dl" download>↓ Download</a></div>
+      </div>
+
+      <div class="fc">
+        <div class="fi" style="background:#EEE8FF;">📖</div>
+        <div class="fc-name">LaTeX Quick-Start Guide</div>
+        <div class="fc-desc">New to LaTeX? This guide gets you writing in 10 minutes — where to write, the 10 commands you need, adding figures, citations, and fixing errors.</div>
+        <div class="fc-foot"><span class="ftag ft">PDF · Beginner</span><a href="latex_quickstart.pdf" class="dl" download>↓ Download</a></div>
+      </div>
+    </div>
+
+    <!-- TEMPLATES BY CARD -->
+    <div class="sec-head reveal" style="padding-top:32px;"><div class="sec-badge" style="background:#EEE8FF;color:#5240B0;border-color:#D8CEF8;">Templates</div><div class="sec-title" style="font-size:18px;">Paper templates — by card</div></div>
+    <p class="sec-sub reveal">Choose the template that matches your paper type from the decision tree. Available in Word (.docx) and LaTeX (.tex).</p>
+    <div class="fg reveal">
+      <div class="fc">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:16px;">🔵</span><span class="fc-name" style="margin:0;">Card A — IMRaD</span></div>
+        <div class="fc-desc">Standard experimental paper. Includes Results-first writing order, separate R and D sections, contribution statement guidance.</div>
+        <div class="fc-foot">
+          <div style="display:flex;gap:6px;">
+            <a href="template_cardA_IMRaD.docx" class="dl" download style="font-size:11px;padding:4px 10px;">Word</a>
+            <a href="template_cardA_IMRaD.tex" class="dl" download style="font-size:11px;padding:4px 10px;background:#5240B0;">LaTeX</a>
+          </div>
+        </div>
+      </div>
+      <div class="fc">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:16px;">🟣</span><span class="fc-name" style="margin:0;">Card B — Results + Discussion</span></div>
+        <div class="fc-desc">Physics and engineering. Per-figure observe→interpret→connect rhythm built in. Merged R&D section.</div>
+        <div class="fc-foot">
+          <div style="display:flex;gap:6px;">
+            <a href="template_cardB_Results_Discussion.docx" class="dl" download style="font-size:11px;padding:4px 10px;">Word</a>
+            <a href="template_cardB_Results_Discussion.tex" class="dl" download style="font-size:11px;padding:4px 10px;background:#5240B0;">LaTeX</a>
+          </div>
+        </div>
+      </div>
+      <div class="fc">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:16px;">🔴</span><span class="fc-name" style="margin:0;">Card C — Letter</span></div>
+        <div class="fc-desc">Short, high-impact paper. No section headers (as most letter journals require). Opening paragraph guidance in red.</div>
+        <div class="fc-foot">
+          <div style="display:flex;gap:6px;">
+            <a href="template_cardC_Letter.docx" class="dl" download style="font-size:11px;padding:4px 10px;">Word</a>
+            <a href="template_cardC_Letter.tex" class="dl" download style="font-size:11px;padding:4px 10px;background:#5240B0;">LaTeX</a>
+          </div>
+        </div>
+      </div>
+      <div class="fc">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:16px;">🟠</span><span class="fc-name" style="margin:0;">Card D — Theory / Modeling</span></div>
+        <div class="fc-desc">Framework or derivation as contribution. Assumptions section, numbered equations, limiting cases validation.</div>
+        <div class="fc-foot">
+          <div style="display:flex;gap:6px;">
+            <a href="template_cardD_Theory_Modeling.docx" class="dl" download style="font-size:11px;padding:4px 10px;">Word</a>
+            <a href="template_cardD_Theory_Modeling.tex" class="dl" download style="font-size:11px;padding:4px 10px;background:#5240B0;">LaTeX</a>
+          </div>
+        </div>
+      </div>
+      <div class="fc">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;"><span style="font-size:16px;">🟢</span><span class="fc-name" style="margin:0;">Card E — AI / ML Paper</span></div>
+        <div class="fc-desc">Algorithm or model contribution. Pre-built comparison table, ablation table, failure cases section flagged as required.</div>
+        <div class="fc-foot">
+          <div style="display:flex;gap:6px;">
+            <a href="template_cardE_AI_ML.docx" class="dl" download style="font-size:11px;padding:4px 10px;">Word</a>
+            <a href="template_cardE_AI_ML.tex" class="dl" download style="font-size:11px;padding:4px 10px;background:#5240B0;">LaTeX</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LATEX CALLOUT -->
+    <div class="latex-box reveal" style="margin-top:16px;">
+      <div class="latex-top">
+        <div class="latex-icon">⚡</div>
+        <div>
+          <div class="latex-label">New to LaTeX?</div>
+          <div class="latex-title">Get writing in 10 minutes — no installation needed</div>
+        </div>
+      </div>
+      <p class="latex-desc">LaTeX looks intimidating but you only need to know 3 things to start. The Quick-Start Guide (in your files above) walks you through everything step by step.</p>
+      <div class="latex-steps">
+        <div class="lts"><div class="lts-n">Step 01</div><div class="lts-t">Go to overleaf.com</div><div class="lts-s">Free account, no install, works in browser</div></div>
+        <div class="lts"><div class="lts-n">Step 02</div><div class="lts-t">Upload your .tex template</div><div class="lts-s">New Project → Upload Project → select file</div></div>
+        <div class="lts"><div class="lts-n">Step 03</div><div class="lts-t">Replace blue placeholders</div><div class="lts-s">Click [BRACKET], type your text, hit Compile</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKFLOW -->
+  <div id="wf-s">
+    <div class="sec-head reveal"><div class="sec-badge">02</div><div class="sec-title">9-step workflow tracker</div></div>
+    <p class="sec-sub reveal">Click each step when you complete it. Always start with step 4 — Results.</p>
+    <div class="wfl reveal" id="wfl">
+      <div class="wi" onclick="twf(this,0)"><div class="wicb">✓</div><div class="wisn">01</div><div class="wic"><div class="wit">Inspect your data</div><div class="wih">State your main result in one sentence before continuing</div></div><div class="wibg">Foundation</div></div>
+      <div class="wi" onclick="twf(this,1)"><div class="wicb">✓</div><div class="wisn">02</div><div class="wic"><div class="wit">Generate all candidate plots</div><div class="wih">Make 10–15 options — you'll cut to 3–5</div></div><div class="wibg">Visualization</div></div>
+      <div class="wi" onclick="twf(this,2)"><div class="wicb">✓</div><div class="wisn">03</div><div class="wic"><div class="wit">Select your core figures</div><div class="wih">3–5 load-bearing figures that tell the story</div></div><div class="wibg">Curation</div></div>
+      <div class="wi wa" onclick="twf(this,3)"><div class="wicb">✓</div><div class="wisn">04</div><div class="wic"><div class="wit">Write Results — always first</div><div class="wih">The engine of the paper. Use the Results AI prompt.</div></div><div class="wibg">⚡ Start here</div></div>
+      <div class="wi" onclick="twf(this,4)"><div class="wicb">✓</div><div class="wisn">05</div><div class="wic"><div class="wit">Extract your contribution statement</div><div class="wih">"Here we show that [finding] using [method]…"</div></div><div class="wibg">Critical</div></div>
+      <div class="wi" onclick="twf(this,5)"><div class="wicb">✓</div><div class="wisn">06</div><div class="wic"><div class="wit">Write Introduction</div><div class="wih">4 paragraphs: field → known → gap → contribution</div></div><div class="wibg">Narrative</div></div>
+      <div class="wi" onclick="twf(this,6)"><div class="wicb">✓</div><div class="wisn">07</div><div class="wic"><div class="wit">Write Methods</div><div class="wih">Every parameter = exact value. Reproducible.</div></div><div class="wibg">Reproducibility</div></div>
+      <div class="wi" onclick="twf(this,7)"><div class="wicb">✓</div><div class="wisn">08</div><div class="wic"><div class="wit">Write Discussion</div><div class="wih">Answer → mechanism → prior work → limitations</div></div><div class="wibg">Interpretation</div></div>
+      <div class="wi" onclick="twf(this,8)"><div class="wicb">✓</div><div class="wisn">09</div><div class="wic"><div class="wit">Write Abstract — last</div><div class="wih">Only after everything else is done. Numbers must match Results exactly.</div></div><div class="wibg">Always last</div></div>
+    </div>
+  </div>
+
+  <!-- DECISION TREE -->
+  <div id="dt-s">
+    <div class="sec-head reveal"><div class="sec-badge">03</div><div class="sec-title">Decision tree</div></div>
+    <p class="sec-sub reveal">Not sure which paper structure to use? Find yours below — then open the matching template from the files section above.</p>
+    <div class="tl reveal">
+      <div class="ti"><div class="tem">🔵</div><div class="ti-info"><div class="ti-n">IMRaD</div><div class="ti-w">Experimental data · hypothesis testing · most journals</div></div><div class="ti-a">→ Card A</div></div>
+      <div class="ti"><div class="tem">🟣</div><div class="ti-info"><div class="ti-n">Results + Discussion</div><div class="ti-w">Interpretation inseparable from results · physics · engineering</div></div><div class="ti-a">→ Card B</div></div>
+      <div class="ti"><div class="tem">🔴</div><div class="ti-info"><div class="ti-n">Letter / Short communication</div><div class="ti-w">Single strong result · high novelty · Nature, PRL, etc.</div></div><div class="ti-a">→ Card C</div></div>
+      <div class="ti"><div class="tem">🟠</div><div class="ti-info"><div class="ti-n">Theory / Modeling</div><div class="ti-w">No experimental data · model or framework is the contribution</div></div><div class="ti-a">→ Card D</div></div>
+      <div class="ti"><div class="tem">🟢</div><div class="ti-info"><div class="ti-n">AI / ML Paper</div><div class="ti-w">Algorithm or model · metrics + baselines · NeurIPS, ICML, CVPR</div></div><div class="ti-a">→ Card E</div></div>
+    </div>
+  </div>
+
+  <!-- PROMPTS -->
+  <div id="prompt-s">
+    <div class="sec-head reveal"><div class="sec-badge">04</div><div class="sec-title">AI prompt library</div></div>
+    <p class="sec-sub reveal">Pick your field and section, copy the prompt, fill in every [BRACKET] with your real data, paste into any AI tool.</p>
+    <div class="ib reveal"><strong>How to use:</strong> Replace every [BRACKET] with your actual data before running. The more specific you are, the better the draft. Always check AI output against your figures.</div>
+    <div class="pw reveal">
+      <div class="pbar">
+        <button class="pstab active" onclick="ss('results',this)">Results</button>
+        <button class="pstab" onclick="ss('intro',this)">Introduction</button>
+        <button class="pstab" onclick="ss('methods',this)">Methods</button>
+        <button class="pstab" onclick="ss('discussion',this)">Discussion</button>
+        <button class="pstab" onclick="ss('abstract',this)">Abstract</button>
+      </div>
+      <div class="pfbar">
+        <button class="pftab active" onclick="sf('general',this)">General</button>
+        <button class="pftab" onclick="sf('bio',this)">🔬 Life Sciences</button>
+        <button class="pftab" onclick="sf('physics',this)">⚛️ Physics</button>
+        <button class="pftab" onclick="sf('cs',this)">💻 CS / AI</button>
+      </div>
+      <div class="pd">
+        <div class="pm" id="pm">General · Results section</div>
+        <div class="pc" id="pcode">Write a Results paragraph for a scientific paper.
+
+Figure: <span class="ph">[DESCRIBE THE FIGURE]</span>
+Main observation: <span class="ph">[WHAT THE DATA SHOWS — with specific numbers]</span>
+Statistics: <span class="ph">[n=X, p-value, test used]</span>
+Control/baseline: <span class="ph">[IF APPLICABLE]</span>
+
+<span class="cm">Rules:
+- Use past tense. Report specific numbers.
+- No interpretation — never "suggests" or "indicates."
+- One paragraph, 80–120 words.</span><button class="cpb" onclick="cp(this)">Copy</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEFORE/AFTER -->
+  <div class="sec-head reveal"><div class="sec-badge">05</div><div class="sec-title">Before & after examples</div></div>
+  <p class="sec-sub reveal">The exact mistakes most researchers make — and how to fix them. Each example is real.</p>
+  <div class="reveal">
+    <div class="ba-tabs">
+      <button class="batab active" onclick="sba('res',this)">Results</button>
+      <button class="batab" onclick="sba('dis',this)">Discussion</button>
+      <button class="batab" onclick="sba('abs',this)">Abstract</button>
+      <button class="batab" onclick="sba('int',this)">Introduction</button>
+      <button class="batab" onclick="sba('met',this)">Methods</button>
+    </div>
+    <div class="ba-panel active" id="ba-res">
+      <div class="ba-col bef"><div class="ba-lbl">❌ Before</div><div class="ba-q">"We measured enzyme activity at different temperatures and found it increased significantly. The results suggest the enzyme works better at higher temperatures. Activity was much higher at 60°C."</div><ul class="ba-ul"><li>"Increased significantly" — no numbers</li><li>"Results suggest" — interpretation in Results</li><li>"Much higher" — how much exactly?</li><li>No statistics (n=?, p=?, test?)</li></ul></div>
+      <div class="ba-col aft"><div class="ba-lbl">✓ After</div><div class="ba-q">"Enzyme activity increased from 12 ± 2 U/mg at 20°C to 87 ± 5 U/mg at 60°C, a 7.3-fold increase (n=6, one-way ANOVA, p&lt;0.001; Fig. 2A). Activity declined at 80°C to 41 ± 6 U/mg."</div><ul class="ba-ul"><li>Exact numbers for every comparison</li><li>Full statistical context stated</li><li>Figure reference included</li><li>Zero interpretation — pure observation</li></ul></div>
+    </div>
+    <div class="ba-panel" id="ba-dis">
+      <div class="ba-col bef"><div class="ba-lbl">❌ Before</div><div class="ba-q">"In this study, we measured enzyme activity. We found maximum activity at 60°C. These results are very interesting. Our findings are consistent with previous studies. The enzyme could potentially be used industrially."</div><ul class="ba-ul"><li>Opens by repeating Methods</li><li>Repeats Results verbatim</li><li>"Very interesting" — not scientific language</li><li>No specific prior work cited; no limitations</li></ul></div>
+      <div class="ba-col aft"><div class="ba-lbl">✓ After</div><div class="ba-q">"Our results demonstrate thermophilic adaptation: the 7.3-fold increase exceeds the 4.1-fold range for mesophilic homologs (Smith et al., 2021). The decline at 80°C likely reflects partial denaturation. This profile supports viability for industrial bioprocessing. Our study is limited to in vitro conditions."</div><ul class="ba-ul"><li>Opens by answering the main question</li><li>Comparison with specific numbers + citation</li><li>Mechanism proposed with evidence</li><li>Limitations stated explicitly</li></ul></div>
+    </div>
+    <div class="ba-panel" id="ba-abs">
+      <div class="ba-col bef"><div class="ba-lbl">❌ Before</div><div class="ba-q">"Enzyme thermostability is important for industrial applications. We studied an enzyme and measured activity at different temperatures. The enzyme showed good activity. Our results suggest it may be useful industrially."</div><ul class="ba-ul"><li>No gap stated</li><li>"Good activity" — not quantitative</li><li>"May be useful" — too hedged</li><li>No numbers anywhere</li></ul></div>
+      <div class="ba-col aft"><div class="ba-lbl">✓ After</div><div class="ba-q">"Thermostable enzymes are essential for bioprocessing, yet most hydrolases lose activity above 50°C. Here we characterize a novel esterase from T. aquaticus. Activity increased 7.3-fold to 87 ± 5 U/mg at 60°C (n=6), with a 48-hour half-life — exceeding all previously reported homologs."</div><ul class="ba-ul"><li>Gap stated in sentence 1</li><li>Exact numbers from Results</li><li>Compared to prior art specifically</li><li>Self-contained and readable alone</li></ul></div>
+    </div>
+    <div class="ba-panel" id="ba-int">
+      <div class="ba-col bef"><div class="ba-lbl">❌ Before</div><div class="ba-q">"In this paper, we study the thermostability of a novel esterase. We use biochemical methods to understand its properties. The results may provide insights. Section 2 describes methods, Section 3 presents results."</div><ul class="ba-ul"><li>"We study" — not a contribution</li><li>"May provide insights" — too vague</li><li>Paper organization summary is filler</li><li>No "Here we show that…"</li></ul></div>
+      <div class="ba-col aft"><div class="ba-lbl">✓ After</div><div class="ba-q">"Here we show that the esterase from T. aquaticus TA-7 exhibits maximum activity of 87 U/mg at 60°C — a 7.3-fold improvement over mesophilic homologs — and retains &gt;80% activity after 48 hours, making it viable for sustained industrial bioprocessing."</div><ul class="ba-ul"><li>Starts with "Here we show that…"</li><li>Includes key quantitative result</li><li>Compares to existing solutions</li><li>States specific practical implication</li></ul></div>
+    </div>
+    <div class="ba-panel" id="ba-met">
+      <div class="ba-col bef"><div class="ba-lbl">❌ Before</div><div class="ba-q">"The enzyme was expressed in E. coli and purified using standard chromatography. Activity assays were performed at various temperatures. Samples were incubated for a suitable time. Statistical analysis used standard software."</div><ul class="ba-ul"><li>"Standard chromatography" — which?</li><li>"Various temperatures" — what range?</li><li>"Suitable time" — exact duration?</li><li>"Standard software" — which version?</li></ul></div>
+      <div class="ba-col aft"><div class="ba-lbl">✓ After</div><div class="ba-q">"Gene cloned into pET-28a; expressed in E. coli BL21(DE3) (37°C, 4h, 0.5 mM IPTG). Purified by Ni-NTA (HisTrap HP) then SEC (Superdex 200). Activity: 1 mM p-nitrophenyl butyrate, 20–80°C in 10°C steps, A405 at 10 min. n=6. One-way ANOVA, Tukey, GraphPad Prism v9.5, p&lt;0.05."</div><ul class="ba-ul"><li>Every parameter has an exact value</li><li>Columns and manufacturers specified</li><li>n=6 stated; statistics fully given</li><li>Reproducible without contacting the authors</li></ul></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div id="cl-s">
+    <div class="sec-head reveal"><div class="sec-badge">06</div><div class="sec-title">Pre-submission checklist</div></div>
+    <p class="sec-sub reveal">Check every item before you submit. Click each one to mark it done.</p>
+    <div class="reveal">
+      <div class="clg">Contribution & structure</div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">Contribution stated in Introduction §4 — "Here we show that…"</div></div></div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">Results section has no interpretation or speculation</div><div class="cli-s">Remove every "suggests," "implies," "indicates" from Results</div></div></div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">Discussion opens by directly answering the main question</div></div></div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">Limitations stated explicitly in Discussion</div></div></div>
+      <div class="clg">Figures & data</div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">3–5 main figures, each with one clear message</div><div class="cli-s">Extra data moved to supplementary</div></div></div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">All captions self-contained with statistical context</div></div></div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">Figures tested in grayscale</div></div></div>
+      <div class="clg">Abstract & AI verification</div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">Abstract written last — numbers match Results exactly</div></div></div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">All AI-generated text verified sentence-by-sentence against data</div></div></div>
+      <div class="cli" onclick="tcl(this)"><div class="cli-cb">✓</div><div><div class="cli-t">Journal formatting requirements met</div></div></div>
+      <div class="done-msg" id="dm">🎉 All items checked — your paper is ready to submit. Good luck!</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>From Data to Paper</strong><br>
+  <span style="margin-top:5px;display:block;">Thank you for your purchase. Good luck with your paper.</span>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach((en,i)=>{if(en.isIntersecting){setTimeout(()=>en.target.classList.add('vis'),i*55);obs.unobserve(en.target);}});},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+function G(id){document.querySelector(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+let done=new Set();
+function twf(el,i){
+  el.classList.toggle('wd');el.classList.remove('wa');
+  done.has(i)?done.delete(i):done.add(i);
+  const its=document.querySelectorAll('.wi');
+  its.forEach(it=>{if(!it.classList.contains('wd'))it.classList.remove('wa');});
+  for(let j=0;j<its.length;j++){if(!its[j].classList.contains('wd')){its[j].classList.add('wa');break;}}
+  const n=done.size,p=Math.round(n/9*100);
+  document.getElementById('pd').textContent=n;
+  document.getElementById('pf').style.width=p+'%';
+  document.getElementById('pct').textContent=p+'%';
+}
+const P={
+general:{
+  results:{m:'General · Results section',c:`Write a Results paragraph for a scientific paper.\n\nFigure: <span class="ph">[DESCRIBE THE FIGURE]</span>\nMain observation: <span class="ph">[WHAT THE DATA SHOWS — with specific numbers]</span>\nStatistics: <span class="ph">[n=X, p-value, test used]</span>\nControl/baseline: <span class="ph">[IF APPLICABLE]</span>\n\n<span class="cm">Rules:\n- Use past tense. Report specific numbers.\n- No interpretation — never "suggests" or "indicates."\n- One paragraph, 80–120 words.</span>`},
+  intro:{m:'General · Introduction',c:`Write an Introduction (4-paragraph structure).\n\nField and importance: <span class="ph">[DESCRIBE THE AREA AND WHY IT MATTERS]</span>\nWhat is known: <span class="ph">[2–3 KEY ESTABLISHED FINDINGS]</span>\nThe gap: <span class="ph">[THE SPECIFIC OPEN QUESTION]</span>\nContribution: <span class="ph">[YOUR FINDING — "Here we show that X"]</span>\nKey result: <span class="ph">[ONE QUANTITATIVE RESULT]</span>\n\n<span class="cm">Paragraph 4 must end with "Here we show that…"\nLeave [CITATION] placeholders.</span>`},
+  methods:{m:'General · Methods',c:`Write a Methods section.\n\nMaterials/datasets: <span class="ph">[LIST WITH FULL SPECIFICATIONS]</span>\nEquipment/software: <span class="ph">[WITH MODEL NUMBERS AND VERSIONS]</span>\nProtocol: <span class="ph">[STEPS IN ORDER — exact timing, conditions]</span>\nSample size: <span class="ph">[n=X replicates per condition]</span>\nStatistical tests: <span class="ph">[TEST, SOFTWARE, VERSION, THRESHOLD]</span>\nControls: <span class="ph">[POSITIVE AND NEGATIVE CONTROLS]</span>\n\n<span class="cm">Past tense. Every parameter = exact value.\nDo not include results or rationale.</span>`},
+  discussion:{m:'General · Discussion',c:`Write a Discussion section.\n\nMain result: <span class="ph">[YOUR KEY FINDING WITH NUMBERS]</span>\nProposed mechanism: <span class="ph">[WHY THIS RESULT OCCURS]</span>\nComparison to prior work: <span class="ph">[e.g. "Our result exceeds Smith et al. 2021"]</span>\nLimitations: <span class="ph">[HONEST LIST OF WHAT YOUR STUDY CANNOT PROVE]</span>\nImplications: <span class="ph">[WHAT THIS ENABLES OR CHANGES]</span>\n\n<span class="cm">Open by directly answering the main question.\nDo not repeat Results. State limitations explicitly.</span>`},
+  abstract:{m:'General · Abstract — write last',c:`Write an Abstract (5-sentence structure, max 200 words).\n\nField + problem: <span class="ph">[THE AREA AND SPECIFIC PROBLEM — 1 sentence]</span>\nGap: <span class="ph">[WHAT IS CURRENTLY UNKNOWN — 1 sentence]</span>\nApproach: <span class="ph">[WHAT YOU DID — method in brief]</span>\nMain result: <span class="ph">[KEY FINDING WITH EXACT NUMBERS]</span>\nSignificance: <span class="ph">[WHY THIS MATTERS]</span>\n\n<span class="cm">No citations. No undefined jargon.\nMust be readable without the paper. Max 200 words.</span>`}},
+bio:{
+  results:{m:'Life Sciences · Results',c:`Write a Results paragraph for a life sciences paper.\n\nExperiment type: <span class="ph">[ASSAY / IMAGING / SEQUENCING / BEHAVIORAL / CLINICAL]</span>\nWhat was measured: <span class="ph">[DEPENDENT VARIABLE + UNITS]</span>\nConditions: <span class="ph">[e.g. "treatment vs. vehicle control, 3 concentrations"]</span>\nKey result: <span class="ph">[VALUE ± SD — e.g. "50 µM reduced viability to 23 ± 4%"]</span>\nReplicates: <span class="ph">[n=X biological, Y technical replicates each]</span>\nStatistical test: <span class="ph">[TEST, POST-HOC, p-value]</span>\nControls: <span class="ph">[POSITIVE / NEGATIVE / VEHICLE]</span>\n\n<span class="cm">Distinguish biological from technical replicates.\nState p-value AND effect size. Past tense. No interpretation.</span>`},
+  intro:{m:'Life Sciences · Introduction',c:`Write an Introduction for a life sciences paper.\n\nBiological problem: <span class="ph">[THE DISEASE, PROCESS, OR MECHANISM AND RELEVANCE]</span>\nWhat is established: <span class="ph">[2–3 KEY PRIOR FINDINGS]</span>\nThe gap: <span class="ph">[e.g. "However, the role of X in condition Y remains unclear"]</span>\nApproach: <span class="ph">[MODEL + METHOD — e.g. "Using primary murine macrophages and RNA-seq…"]</span>\nContribution: <span class="ph">"Here we show that [FINDING]"</span>\n\n<span class="cm">End paragraph 4 with "Here we show that…"</span>`},
+  methods:{m:'Life Sciences · Methods',c:`Write a Methods section for a cell/molecular biology paper.\n\nCell line or organism: <span class="ph">[e.g. "HeLa cells (ATCC CCL-2), passages 5–15"]</span>\nCulture conditions: <span class="ph">[e.g. "DMEM + 10% FBS, 37°C, 5% CO2"]</span>\nTreatment: <span class="ph">[COMPOUND, CONCENTRATION, DURATION, VEHICLE]</span>\nAssay/readout: <span class="ph">[ASSAY NAME + PROTOCOL + KEY REAGENTS WITH CATALOG #]</span>\nReplicates: <span class="ph">[BIOLOGICAL n= AND TECHNICAL n=]</span>\nStatistics: <span class="ph">[TEST, SOFTWARE, VERSION, THRESHOLD]</span>\n\n<span class="cm">Include passage number. Specify reagent catalog numbers.</span>`},
+  discussion:{m:'Life Sciences · Discussion',c:`Write a Discussion for a life sciences paper.\n\nMain finding: <span class="ph">[YOUR KEY RESULT WITH NUMBERS]</span>\nBiological mechanism: <span class="ph">[PATHWAY, RECEPTOR, OR INTERACTION PROPOSED]</span>\nComparison to prior work: <span class="ph">[SPECIFIC PRIOR RESULTS — e.g. "Smith et al. 2020 reported X"]</span>\nAlternative explanations: <span class="ph">[OTHER POSSIBLE INTERPRETATIONS]</span>\nLimitations: <span class="ph">[CELL LINE GENERALIZABILITY? IN VITRO? SAMPLE SIZE?]</span>\n\n<span class="cm">Do not confuse correlation with causation.\nAcknowledge in vitro vs in vivo limits explicitly.</span>`},
+  abstract:{m:'Life Sciences · Abstract',c:`Write an Abstract for a life sciences paper (150–200 words).\n\nBackground: <span class="ph">[BIOLOGICAL PROBLEM AND CLINICAL/SCIENTIFIC RELEVANCE]</span>\nGap: <span class="ph">[WHAT IS UNKNOWN — specific mechanism, target, or context]</span>\nApproach: <span class="ph">[MODEL + METHOD]</span>\nKey result: <span class="ph">[MAIN FINDING WITH NUMBERS — fold change, p-value, effect size]</span>\nSignificance: <span class="ph">[BIOLOGICAL OR CLINICAL IMPLICATION]</span>\n\n<span class="cm">Include organism/cell line. State key quantitative result.\nNo undefined abbreviations. No citations.</span>`}},
+physics:{
+  results:{m:'Physics & Engineering · Results + Discussion',c:`Write a combined Results & Discussion paragraph (physics style).\n\nFigure type: <span class="ph">[e.g. "stress-strain curve", "I-V characteristic", "XRD pattern"]</span>\nPhysical quantity: <span class="ph">[VARIABLE + UNITS — e.g. "Young's modulus (GPa)"]</span>\nConditions: <span class="ph">[TEMPERATURE, PRESSURE, FIELD STRENGTH, SAMPLE GEOMETRY]</span>\nKey measurement: <span class="ph">[VALUE ± UNCERTAINTY — e.g. "E = 210 ± 8 GPa at 25°C"]</span>\nTheory/literature value: <span class="ph">[e.g. "bulk value 193 GPa (Ref)"]</span>\nPhysical mechanism: <span class="ph">[WHY THIS RESULT OCCURS PHYSICALLY]</span>\n\n<span class="cm">Always include units and uncertainty.\nNote whether result confirms or deviates from theory.</span>`},
+  intro:{m:'Physics · Introduction',c:`Write an Introduction for a physics/engineering paper.\n\nPhysical problem: <span class="ph">[THE OPEN QUESTION — physical and practical significance]</span>\nWhat is established: <span class="ph">[KEY PRIOR RESULTS AND THEORETICAL FRAMEWORK]</span>\nThe gap: <span class="ph">[WHERE THEORY AND EXPERIMENT DISAGREE, OR WHAT REMAINS UNMEASURED]</span>\nSystem studied: <span class="ph">[MATERIAL, DEVICE, OR SYSTEM + KEY PARAMETERS]</span>\nContribution: <span class="ph">"Here we show that [PHYSICAL FINDING WITH NUMBERS]"</span>`},
+  methods:{m:'Physics & Materials · Methods',c:`Write a Methods section for a physics/materials science paper.\n\nSample preparation: <span class="ph">[SYNTHESIS ROUTE, PRECURSORS, CONDITIONS — T, t, atmosphere]</span>\nSample geometry: <span class="ph">[DIMENSIONS, ORIENTATION, SURFACE TREATMENT]</span>\nCharacterization: <span class="ph">[TECHNIQUE + INSTRUMENT MODEL + KEY SETTINGS]</span>\nMeasurement conditions: <span class="ph">[T, P, FIELD, FREQUENCY, PROBE CURRENT, ETC.]</span>\nCalibration: <span class="ph">[STANDARD USED AND HOW PERFORMED]</span>\nUncertainty: <span class="ph">[HOW MEASUREMENT UNCERTAINTY WAS DETERMINED]</span>\n\n<span class="cm">Every parameter needs a value and unit.\nState instrument model, manufacturer, and calibration standard.</span>`},
+  discussion:{m:'Physics · Discussion',c:`Write a Discussion for a physics/engineering paper.\n\nMain result: <span class="ph">[PHYSICAL QUANTITY + VALUE + UNITS + UNCERTAINTY]</span>\nComparison to theory: <span class="ph">[HOW RESULT COMPARES TO THEORETICAL PREDICTION]</span>\nComparison to literature: <span class="ph">[SPECIFIC PRIOR MEASUREMENTS WITH VALUES]</span>\nPhysical interpretation: <span class="ph">[MECHANISM — WHY DOES THIS BEHAVIOR OCCUR?]</span>\nLimitations: <span class="ph">[SAMPLE GEOMETRY? TEMPERATURE RANGE? CONDITIONS?]</span>\n\n<span class="cm">Lead with physical interpretation. All quantities must have units.</span>`},
+  abstract:{m:'Physics · Abstract',c:`Write an Abstract for a physics/engineering paper (150 words).\n\nPhysical problem: <span class="ph">[THE OPEN QUESTION OR PHENOMENON STUDIED]</span>\nSystem: <span class="ph">[MATERIAL, DEVICE, OR SYSTEM + KEY PARAMETERS]</span>\nApproach: <span class="ph">[EXPERIMENTAL OR COMPUTATIONAL METHOD]</span>\nMain result: <span class="ph">[PHYSICAL QUANTITY + VALUE + UNITS + UNCERTAINTY]</span>\nComparison: <span class="ph">[HOW THIS COMPARES TO THEORY OR PRIOR WORK]</span>\n\n<span class="cm">Lead with the physical result. All quantities must have units.\nNo citations. Max 150 words.</span>`}},
+cs:{
+  results:{m:'CS / AI / ML · Results',c:`Write a Results section for an ML/AI paper.\n\nTask: <span class="ph">[e.g. "image classification on ImageNet-1K"]</span>\nMetric(s): <span class="ph">[e.g. "Top-1 accuracy, Top-5 accuracy, FLOPs"]</span>\nYour method: <span class="ph">[YOUR NUMBERS — e.g. "84.2% Top-1, 96.8% Top-5"]</span>\nBaseline 1: <span class="ph">[METHOD NAME + METRIC]</span>\nBaseline 2: <span class="ph">[METHOD NAME + METRIC]</span>\nState-of-the-art: <span class="ph">[BEST PRIOR RESULT + PAPER]</span>\nStatistical note: <span class="ph">[e.g. "5-run mean ± std, seeds 0–4"]</span>\n\n<span class="cm">Note whether improvements are statistically significant.\nDescribe ablation results separately.</span>`},
+  intro:{m:'CS / AI · Introduction',c:`Write an Introduction for a CS/AI paper.\n\nProblem: <span class="ph">[THE TASK OR CHALLENGE AND WHY IT MATTERS]</span>\nWhy it is hard: <span class="ph">[KEY CHALLENGE — what makes this non-trivial]</span>\nPrior approaches and limitations: <span class="ph">[WHAT EXISTS AND WHERE IT FAILS]</span>\nYour approach: <span class="ph">[METHOD NAME + KEY IDEA]</span>\nKey result: <span class="ph">[YOUR BEST METRIC vs. PRIOR STATE-OF-THE-ART]</span>\n\n<span class="cm">Name your method. Mention code availability if releasing.</span>`},
+  methods:{m:'CS / AI · Method section',c:`Write a Method section for an ML paper.\n\nMethod name: <span class="ph">[YOUR METHOD NAME IF APPLICABLE]</span>\nCore idea: <span class="ph">[THE KEY INSIGHT OR NOVELTY — 1–2 sentences]</span>\nArchitecture/algorithm: <span class="ph">[DESCRIBE THE COMPONENTS]</span>\nKey design choices: <span class="ph">[WHY THESE CHOICES — connect to the problem]</span>\nTraining details: <span class="ph">[OPTIMIZER, LR, BATCH SIZE, EPOCHS, HARDWARE, SEEDS]</span>\nCode/reproducibility: <span class="ph">[WILL CODE BE RELEASED? WHERE?]</span>\n\n<span class="cm">Connect every design choice to the problem.\nState compute requirements.</span>`},
+  discussion:{m:'CS / AI · Discussion / Conclusion',c:`Write a Discussion/Conclusion for an ML paper.\n\nMain result: <span class="ph">[YOUR KEY METRIC vs. PRIOR ART]</span>\nWhy your method works: <span class="ph">[THE REASON YOUR APPROACH SUCCEEDS]</span>\nAblation insight: <span class="ph">[WHAT THE ABLATION REVEALS]</span>\nFailure cases: <span class="ph">[WHERE YOUR METHOD STRUGGLES — be specific]</span>\nFuture directions: <span class="ph">[SPECIFIC NEXT STEPS]</span>\n\n<span class="cm">Reviewers penalize papers that ignore failure cases.</span>`},
+  abstract:{m:'CS / AI · Abstract',c:`Write an Abstract for an ML/AI paper (150–200 words).\n\nTask: <span class="ph">[THE PROBLEM YOUR METHOD SOLVES]</span>\nChallenge: <span class="ph">[KEY DIFFICULTY IN THIS TASK]</span>\nYour approach: <span class="ph">[METHOD NAME + KEY IDEA]</span>\nKey result: <span class="ph">[YOUR BEST METRIC vs. PRIOR ART — absolute numbers]</span>\nBroader impact: <span class="ph">[WHY THIS ADVANCES THE FIELD]</span>\n\n<span class="cm">State task in sentence 1. Include absolute numbers.\nMention code if releasing. No citations.</span>`}}
+};
+let cF='general',cS='results';
+function ss(s,b){document.querySelectorAll('.pstab').forEach(t=>t.classList.remove('active'));b.classList.add('active');cS=s;rp();}
+function sf(f,b){document.querySelectorAll('.pftab').forEach(t=>t.classList.remove('active'));b.classList.add('active');cF=f;rp();}
+function rp(){const p=P[cF][cS];document.getElementById('pm').textContent=p.m;document.getElementById('pcode').innerHTML=p.c+'<button class="cpb" onclick="cp(this)">Copy</button>';}
+function cp(b){const t=document.getElementById('pcode').innerText.replace('Copy','').trim();navigator.clipboard.writeText(t).then(()=>{const o=b.textContent;b.textContent='Copied ✓';b.style.borderColor='var(--teal)';b.style.color='var(--teal)';setTimeout(()=>{b.textContent=o;b.style.borderColor='';b.style.color='';},1800);});}
+function sba(k,b){document.querySelectorAll('.batab').forEach(t=>t.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.ba-panel').forEach(p=>p.classList.remove('active'));document.getElementById('ba-'+k).classList.add('active');}
+function tcl(el){el.classList.toggle('chk');const all=document.querySelectorAll('.cli'),chk=document.querySelectorAll('.cli.chk');document.getElementById('dm').style.display=chk.length===all.length?'block':'none';}
+</script>
+</body>
+</html>
